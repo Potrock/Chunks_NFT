@@ -6,12 +6,13 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "../Descriptors/IChunk_Descriptor.sol";
 import "./IChunk.sol";
 
 contract Chunk is ERC721Enumerable, Ownable, ReentrancyGuard, IChunk {
-
+    using SafeMath for uint256;
     uint public mintSupply;
     uint public totalMinted = 0;
     IChunk_Descriptor private descriptor;

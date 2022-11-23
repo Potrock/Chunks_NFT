@@ -3,8 +3,10 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./IChunk_Descriptor.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract Chunk_Descriptor is Ownable, IChunk_Descriptor {
+contract Basic_Descriptor is Ownable, IChunk_Descriptor {
+    using Strings for uint256;
     string private baseURI;
 
     constructor(string memory _baseURI) {
@@ -12,6 +14,6 @@ contract Chunk_Descriptor is Ownable, IChunk_Descriptor {
     }
 
     function getTokenURI(uint _tokenId) override public view returns (string memory) {
-        return string(abi.encodePacked(baseURI, _tokenId));
+        return string(abi.encodePacked(baseURI, _tokenId.toString()));
     }
 }

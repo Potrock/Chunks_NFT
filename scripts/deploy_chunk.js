@@ -19,10 +19,10 @@ async function main() {
   await buildingManager.deployed();
   console.log(`Building Manager deployed to ${buildingManager.address}`);
 
-  const House = await hre.ethers.getContractFactory("House");
-  const house = await House.deploy(buildingManager.address, chunk.address);
-  await house.deployed();
-  console.log(`House (Building) deployed to ${house.address}`);
+  // const House = await hre.ethers.getContractFactory("House");
+  // const house = await House.deploy(buildingManager.address, chunk.address);
+  // await house.deployed();
+  // console.log(`House (Building) deployed to ${house.address}`);
 
   const Farm = await hre.ethers.getContractFactory("Farm");
   const farm = await Farm.deploy(buildingManager.address, chunk.address);
@@ -34,20 +34,20 @@ async function main() {
   await food.deployed();
   console.log(`Food (unit) deployed to ${food.address}`);
   await farm.setFood(food.address);
-  await food.setFarm(farm.address);
 
   await chunk.mintChunk();
   console.log(`Minted 1 Chunk`);
 
-  await buildingManager.registerBuilding(house.address);
-  console.log(`Registered HOUSING in Building Manager (0)`);
+  // await buildingManager.registerBuilding(house.address);
+  // console.log(`Registered HOUSING in Building Manager (0)`);
   await buildingManager.registerBuilding(farm.address);
   console.log(`Registered FARM in Building Manager (1)`);
 
-  // await buildingManager.addBuildingTo(0, 0, 2);
-  // console.log(`Built 2 houses on land id 0`);
-  await buildingManager.addBuildingTo(1, 0, 1);
-  console.log(`Built 1 Farm on land id 0`)
+  /**
+   * Usage: addBuildingTo(buildingId, tokenId, tier)
+   */
+  await buildingManager.addBuildingTo(0, 0, 0);
+  console.log(`Built Tier 1 Farm on Chunk #0`)
 }
 
 main().catch((error) => {

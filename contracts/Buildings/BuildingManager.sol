@@ -30,12 +30,8 @@ contract BuildingManager is Ownable {
         numBuildings++;
     }
 
-    function addBuildingTo(uint _buildingId, uint _tokenId, uint8 _amount) public onlyOwner buildingExists(_buildingId) tokenExists(_tokenId) {
-        IChunk_Building(buildingContracts[_buildingId]).buildAmount(_tokenId, _amount);
-    }
-
-    function removeBuildingFrom(uint _buildingId, uint _tokenId, uint8 _amount) public onlyOwner buildingExists(_buildingId) tokenExists(_tokenId) {
-        IChunk_Building(buildingContracts[_buildingId]).destroyAmount(_tokenId, _amount);
+    function addBuildingTo(uint _buildingId, uint _tokenId, uint8 _tier) public onlyOwner buildingExists(_buildingId) tokenExists(_tokenId) {
+        IChunk_Building(buildingContracts[_buildingId]).build(_tokenId, _tier);
     }
 
     function getBuildingCountById(uint _buildingId, uint _tokenId) public view buildingExists(_buildingId) tokenExists(_tokenId) returns (uint) {

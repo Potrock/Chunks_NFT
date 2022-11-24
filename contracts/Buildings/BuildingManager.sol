@@ -2,8 +2,8 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../NFT/IChunk.sol";
 import "./IChunk_Building.sol";
+import "../NFT/IChunk.sol";
 
 contract BuildingManager is Ownable {
 

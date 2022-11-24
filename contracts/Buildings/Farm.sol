@@ -1,48 +1,37 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/access/Roles.sol";
-import "./IChunk_Building.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "./Building.sol";
 import "../NFT/IChunk.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../Units/IFood.sol";
 
-contract Farm is IChunk_Building, Roles {
-    using Roles for Roles.Role;
-    Roles.Role private admins;
-    address private CHUNK;
-    address private FOOD;
-    address private buildingManager;
+contract Farm is Building, Ownable {
+    IFood private food;
 
-    constructor(address _food, address _buildingManager) {
-        FOOD = _food;
-        buildingManager = _buildingManager;
+    mapping(uint => uint256) claimTimes;
+
+    constructor(address _buildingManager, address _chunk) Building(_buildingManager, _chunk) {
     }
 
-    modifier onlyBuildingManager() {
-        require(msg.sender == buildingManager);
-        _;
-    }
-
-    function setBuildingManager(address _newBuildingManager) public onlyOwner {
-        buildingManager = _newBuildingManager;
+    function setFood(address _food) public onlyOwner {
+        food = IFood(_food);
     }
 
     function getCountByToken(uint _tokenId) public view returns (uint) {
-        require(chunk.tokenExists(_tokenId), "Token does not exist!");
         return counts[_tokenId];
     }
 
     function buildAmount(uint _tokenId, uint _num) public onlyBuildingManager {
-        require(chunk.tokenExists(_tokenId), "Token does not exist!");
-        counts[_tokenId] += _num;
+        require(food != address(0), "FOOD_NOT_SET")
+        food.harvest(_tokenId);
+        _buildAmount(_tokenId, _num);
     }
 
     function destroyAmount(uint _tokenId, uint _num)
         public
         onlyBuildingManager
     {
-        require(chunk.tokenExists(_tokenId), "Token does not exist!");
-        require(counts[_tokenId] >= _num, "Not enough Houses on that land");
-        counts[_tokenId] -= _num;
+        _destroyAmount(_tokenId, _num);
     }
 }

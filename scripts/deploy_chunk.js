@@ -24,15 +24,30 @@ async function main() {
   await house.deployed();
   console.log(`House (Building) deployed to ${house.address}`);
 
+  const Farm = await hre.ethers.getContractFactory("Farm");
+  const farm = await Farm.deploy(buildingManager.address, chunk.address);
+  await farm.deployed();
+  console.log(`Farm (Building) deployed to ${farm.address}`);
+
+  const Food = await hre.ethers.getContractFactory("Food");
+  const food = await Food.deploy(chunk.address, farm.address);
+  await food.deployed();
+  console.log(`Food (unit) deployed to ${food.address}`);
+  await farm.setFood(food.address);
+  await food.setFarm(farm.address);
+
   await chunk.mintChunk();
-  await chunk.mintChunk();
-  console.log(`Minted 2 Chunks`);
+  console.log(`Minted 1 Chunk`);
 
   await buildingManager.registerBuilding(house.address);
-  console.log(`Registered HOUSING in Building Manager`);
+  console.log(`Registered HOUSING in Building Manager (0)`);
+  await buildingManager.registerBuilding(farm.address);
+  console.log(`Registered FARM in Building Manager (1)`);
 
-  await buildingManager.addBuildingTo(0, 0, 2);
-  console.log(`Built 2 houses on land id 0`);
+  // await buildingManager.addBuildingTo(0, 0, 2);
+  // console.log(`Built 2 houses on land id 0`);
+  await buildingManager.addBuildingTo(1, 0, 1);
+  console.log(`Built 1 Farm on land id 0`)
 }
 
 main().catch((error) => {

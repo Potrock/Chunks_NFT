@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "../Descriptors/IChunk_Descriptor.sol";
 import "./IChunk.sol";
 
-contract Chunk is ERC721Enumerable, Ownable, ReentrancyGuard, IChunk {
+contract Chunk is ERC721Enumerable, Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     uint public mintSupply;
     uint public totalMinted = 0;
@@ -39,7 +39,7 @@ contract Chunk is ERC721Enumerable, Ownable, ReentrancyGuard, IChunk {
         totalMinted++;
     }
 
-    function tokenExists(uint _tokenId) override public view returns (bool) {
+    function tokenExists(uint _tokenId) external view returns (bool) {
         return _exists(_tokenId);
     }
     

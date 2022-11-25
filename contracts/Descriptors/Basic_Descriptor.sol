@@ -2,10 +2,10 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./IChunk_Descriptor.sol";
+import "./ICity_Descriptor.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract Basic_Descriptor is Ownable, IChunk_Descriptor {
+contract Basic_Descriptor is Ownable, ICity_Descriptor {
     using Strings for uint256;
     string private baseURI;
 

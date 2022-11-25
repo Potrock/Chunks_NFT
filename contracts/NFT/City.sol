@@ -8,22 +8,22 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "../Descriptors/IChunk_Descriptor.sol";
-import "./IChunk.sol";
+import "../Descriptors/ICity_Descriptor.sol";
+import "./ICity.sol";
 
-contract Chunk is ERC721Enumerable, Ownable, ReentrancyGuard {
+contract City is ERC721Enumerable, Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     uint public mintSupply;
     uint public totalMinted = 0;
-    IChunk_Descriptor private descriptor;
+    ICity_Descriptor private descriptor;
 
     constructor(uint _mintSupply, address _descriptor) ERC721("CryptoCity", "CryptoCity") {
         mintSupply = _mintSupply;
-        descriptor = IChunk_Descriptor(_descriptor);
+        descriptor = ICity_Descriptor(_descriptor);
     }
 
     function setDescriptor(address _descriptor) public onlyOwner {
-        descriptor = IChunk_Descriptor(_descriptor);
+        descriptor = ICity_Descriptor(_descriptor);
     }
 
     function tokenURI(uint _tokenId) override public view returns (string memory) {
@@ -32,7 +32,7 @@ contract Chunk is ERC721Enumerable, Ownable, ReentrancyGuard {
         return descriptor.getTokenURI(_tokenId);
     }
 
-    function mintChunk() public {
+    function mint() public {
         require(totalMinted < mintSupply, "All tokens minted");
 
         _safeMint(msg.sender, totalMinted);

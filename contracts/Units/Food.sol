@@ -2,14 +2,14 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../Buildings/IChunk_Building.sol";
-import "../NFT/IChunk.sol";
+import "../Buildings/ICity_Building.sol";
+import "../NFT/ICity.sol";
 import "./Unit.sol";
 
 contract Food is Unit {
     mapping(uint256 => uint256) public claimTimes;
 
-    constructor(address _chunkContract, address _farm)
-        Unit(_chunkContract, _farm)
+    constructor(address _cityContract, address _farm)
+        Unit(_cityContract, _farm)
     {}
 }

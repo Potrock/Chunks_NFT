@@ -2,17 +2,19 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./IChunk_Building.sol";
-import "../NFT/IChunk.sol";
+import "./ICity_Building.sol";
+import "../NFT/ICity.sol";
 
 contract BuildingManager is Ownable {
 
-    IChunk public chunk;
+    ICity public city;
     mapping(uint => address) public buildingContracts;
     uint public numBuildings;
 
-    constructor(address _chunk) {
-        chunk = IChunk(_chunk);
+    event BuildingAdded(uint _buildingId, uint indexed _tokenId, uint8 _tier);
+
+    constructor(address _city) {
+        city = ICity(_city);
     }
 
     modifier buildingExists(uint _buildingId) {
@@ -21,7 +23,7 @@ contract BuildingManager is Ownable {
     }
 
     modifier tokenExists(uint _tokenId) {
-        require(chunk.tokenExists(_tokenId), "Token does not exist");
+        require(city.tokenExists(_tokenId), "Token does not exist");
         _;
     }
 
@@ -31,10 +33,11 @@ contract BuildingManager is Ownable {
     }
 
     function addBuildingTo(uint _buildingId, uint _tokenId, uint8 _tier) public onlyOwner buildingExists(_buildingId) tokenExists(_tokenId) {
-        IChunk_Building(buildingContracts[_buildingId]).build(_tokenId, _tier);
+        ICity_Building(buildingContracts[_buildingId]).build(_tokenId, _tier);
+        emit BuildingAdded(_buildingId, _tokenId, _tier);
     }
 
     function getBuildingCountById(uint _buildingId, uint _tokenId) public view buildingExists(_buildingId) tokenExists(_tokenId) returns (uint) {
-        return IChunk_Building(buildingContracts[_buildingId]).getCountByToken(_tokenId);
+        return ICity_Building(buildingContracts[_buildingId]).getCountByToken(_tokenId);
     }
 }

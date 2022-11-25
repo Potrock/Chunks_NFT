@@ -2,38 +2,38 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../NFT/IChunk.sol";
-import "./IChunk_Building.sol";
+import "../NFT/ICity.sol";
+import "./ICity_Building.sol";
 
-contract Building is IChunk_Building, Ownable {
+contract Building is ICity_Building, Ownable {
 
     struct BuildingInfo {
         uint interactTimestamp;
         uint8 tier;
     }
 
-    IChunk private chunk;
+    ICity private city;
     address private buildingManager;
     mapping(uint => uint8) public counts;
     mapping(uint => mapping(uint8 => BuildingInfo)) public infos;
 
-    constructor(address _buildingManager, address _chunk) {
+    constructor(address _buildingManager, address _city) {
         buildingManager = _buildingManager;
-        chunk = IChunk(_chunk);
+        city = ICity(_city);
     }
 
     modifier onlyBuildingManager() {
-        require(msg.sender == buildingManager);
+        require(msg.sender == buildingManager, "NOT BUILDING MANAGER");
         _;
     }
 
     modifier tokenExists(uint _tokenId) {
-        require(chunk.tokenExists(_tokenId), "Token does not exist!");
+        require(city.tokenExists(_tokenId), "Token does not exist!");
         _;
     }
 
     modifier onlyTokenOwner(uint _tokenId) {
-        require(msg.sender == address(chunk));
+        require(msg.sender == city.ownerOf(_tokenId), "NOT TOKEN OWNER");
         _;
     }
 
@@ -41,8 +41,8 @@ contract Building is IChunk_Building, Ownable {
         buildingManager = _newBuildingManager;
     }
 
-    function setChunk(address _chunk) public onlyOwner {
-        chunk = IChunk(_chunk);
+    function setCity(address _city) public onlyOwner {
+        city = ICity(_city);
     }
 
     function getCountByToken(uint _tokenId) override public view returns (uint8) {

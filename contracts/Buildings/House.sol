@@ -2,12 +2,12 @@
 // pragma solidity ^0.8.9;
 
 // import "./Building.sol";
-// import "../NFT/IChunk.sol";
+// import "../NFT/ICity.sol";
 // import "@openzeppelin/contracts/access/Ownable.sol";
 
 // contract House is Building, Ownable {
 
-//     constructor(address _buildingManager, address _chunk) Building(_buildingManager, _chunk) {
+//     constructor(address _buildingManager, address _city) Building(_buildingManager, _city) {
 //     }
 
 //     function buildAmount(uint _tokenId, uint _num) onlyBuildingManager public {

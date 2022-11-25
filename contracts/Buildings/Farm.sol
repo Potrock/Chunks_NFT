@@ -3,14 +3,14 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./Building.sol";
-import "../NFT/IChunk.sol";
+import "../NFT/ICity.sol";
 import "../Units/IUnit.sol";
 
 contract Farm is Building {
 
     IUnit private food;
 
-    constructor(address _buildingManager, address _chunk) Building(_buildingManager, _chunk) {
+    constructor(address _buildingManager, address _city) Building(_buildingManager, _city) {
     }
 
     function setFood(address _food) public onlyOwner {

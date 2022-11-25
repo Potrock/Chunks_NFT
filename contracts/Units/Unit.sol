@@ -2,19 +2,21 @@
 pragma solidity ^0.8.9;
 
 import "../Buildings/Building.sol";
-import "../NFT/IChunk.sol";
+import "../NFT/ICity.sol";
 
 contract Unit is Ownable {
     Building public spawner;
-    IChunk public chunk;
+    ICity public city;
 
     /**
      * tokenId -> balance
      */
     mapping(uint256 => uint256) public balances;
 
-    constructor(address _chunkContract, address _spawner) {
-        chunk = IChunk(_chunkContract);
+    event Transfer(uint _fromId, uint _toId, uint _amount);
+
+    constructor(address _cityContract, address _spawner) {
+        city = ICity(_cityContract);
         spawner = Building(_spawner);
     }
 
@@ -24,7 +26,7 @@ contract Unit is Ownable {
     }
 
     modifier onlyTokenOwner(uint _tokenId) {
-        require(chunk.ownerOf(_tokenId) == msg.sender);
+        require(city.ownerOf(_tokenId) == msg.sender);
         _;
     }
 
@@ -32,8 +34,8 @@ contract Unit is Ownable {
         spawner = Building(_spawner);
     }
 
-    function setChunk(address _chunk) public onlyOwner {
-        chunk = IChunk(_chunk);
+    function setCity(address _city) public onlyOwner {
+        city = ICity(_city);
     }
 
     function getBalance(uint _tokenId) public view returns (uint) {
@@ -56,5 +58,6 @@ contract Unit is Ownable {
         require(balances[_fromId] >= _amount, "INSUFFICIENT_UNITS");
         balances[_fromId] -= _amount;
         balances[_toId] += _amount;
+        emit Transfer(_fromId, _toId, _amount);
     }
 }

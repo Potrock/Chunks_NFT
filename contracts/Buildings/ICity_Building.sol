@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-interface IChunk_Building {
+interface ICity_Building {
 
     function getCountByToken(uint _tokenId) external view returns (uint8);
 

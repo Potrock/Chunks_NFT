@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "../Buildings/Building.sol";
 import "../NFT/ICity.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Unit is Ownable {
-    Building public spawner;
+    address public spawner;
     ICity public city;
 
     /**
@@ -17,11 +17,11 @@ contract Unit is Ownable {
 
     constructor(address _cityContract, address _spawner) {
         city = ICity(_cityContract);
-        spawner = Building(_spawner);
+        spawner = _spawner;
     }
 
     modifier onlySpawner() {
-        require(msg.sender == address(spawner));
+        require(msg.sender == spawner);
         _;
     }
 
@@ -31,7 +31,7 @@ contract Unit is Ownable {
     }
 
     function setSpawner(address _spawner) public onlyOwner {
-        spawner = Building(_spawner);
+        spawner = _spawner;
     }
 
     function setCity(address _city) public onlyOwner {
